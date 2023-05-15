@@ -1,12 +1,8 @@
-
 function setup() {
-    createCanvas(400, 400);
+    createCanvas(900, 600);
     background(0);
 }
 
 function draw() {
-    translate( 200, 200 );
-    rotate( radians(45) );
-    rect( 0, 0, 100, 100);
-
+    background(0);
 }
