@@ -13,13 +13,15 @@ function draw() {
 
 class Ball {
     constructor(){
-        this.velocity = new createVector(random(-2, 2), random(-2, 2));
-        this.location = new createVector(random(width), random(height));
+        this.velocity = new createVector(0, 0);
+        this.location = new createVector(0, height/2);
+        this.acceleration = new createVector(0.03, 0);
+        this.maxVelocity = 10;
     }
     run(){
         this.draw();
         this.move();
-        this.bounce();
+        this.edge();
     }
 
     draw(){
@@ -29,11 +31,15 @@ class Ball {
     }
 
     move(){
+        this.velocity.add(this.acceleration);
+        this.velocity.limit(this.maxVelocity);
         this.location.add(this.velocity);
     }
 
-    bounce(){
-        if(this.location.x < 0 || this.location.x > width) this.velocity.x *= -1;
-        if(this.location.y < 0 || this.location.y > height) this.velocity.y *= -1;
+    edge(){
+        if (this.location.x<0) this.location.x = width;
+        else if(this.location.x>width) this.location.x = 0;
+        else if(this.location.y <0) this.location.y = height;
+        else if(this.location.y > height) this.location.y = 0;
     }
 }
