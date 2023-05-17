@@ -28,12 +28,6 @@ function draw() {
   spaceship.run();
   asteroids.run();
 
-  //WORKS FOR MOUSE AND ASTEROID
-  // for(let i = 0; i < asteroids.locations.length; i++)
-  // {
-  //   isInside(test,20,asteroids.locations[i], asteroids.diams[i]);
-  // }
-
   drawEarth();
 
 
@@ -57,20 +51,22 @@ function drawEarth(){
 //checks collisions between all types of bodies
 function checkCollisions(spaceship, asteroids){
 
+    
+    //YOUR CODE HERE (2-3 lines approx)
+   for(let i = 0; i < asteroids.locations.length; i++)
+   {
     //spaceship-2-asteroid collisions
-    //YOUR CODE HERE (2-3 lines approx)
-
+      if(isInside(spaceship.location,spaceship.size,asteroids.locations[i], asteroids.diams[i])) gameOver();
     //asteroid-2-earth collisions
-    //YOUR CODE HERE (2-3 lines approx)
+      else if(isInside(earthLoc,earthSize.x,asteroids.locations[i], asteroids.diams[i])) gameOver();
+      //spaceship-2-earth
+      else if(isInside(earthLoc,earthSize.x,spaceship.location,spaceship.size)) gameOver();
+      //spaceship-2-atmosphere
+      else if(isInside(atmosphereLoc,atmosphereSize.x,spaceship.location,spaceship.size)) spaceship.setNearEarth();
+      //bullet collisions
+      else if(isInside(earthLoc,earthSize.x,spaceship.location,spaceship.size)); //REMOVE PARTICLE;
 
-    //spaceship-2-earth
-    //YOUR CODE HERE (1-2 lines approx)
-
-    //spaceship-2-atmosphere
-    //YOUR CODE HERE (1-2 lines approx)
-
-    //bullet collisions
-    //YOUR CODE HERE (3-4 lines approx)
+   }
 }
 
 //////////////////////////////////////////////////
