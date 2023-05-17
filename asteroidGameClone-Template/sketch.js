@@ -22,12 +22,21 @@ function setup() {
 //////////////////////////////////////////////////
 function draw() {
   background(0);
+
   sky();
 
   spaceship.run();
   asteroids.run();
 
+  //WORKS FOR MOUSE AND ASTEROID
+  // for(let i = 0; i < asteroids.locations.length; i++)
+  // {
+  //   isInside(test,20,asteroids.locations[i], asteroids.diams[i]);
+  // }
+
   drawEarth();
+
+
 
   checkCollisions(spaceship, asteroids); // function that checks collision between various elements
 }
@@ -68,6 +77,13 @@ function checkCollisions(spaceship, asteroids){
 //helper function checking if there's collision between object A and object B
 function isInside(locA, sizeA, locB, sizeB){
     // YOUR CODE HERE (3-5 lines approx)
+    var distance = dist(locA.x, locA.y, locB.x, locB.y);
+
+    if(distance < sizeA/2 + sizeB /2)
+    {
+      return true;
+    }
+    return false;
 }
 
 //////////////////////////////////////////////////
