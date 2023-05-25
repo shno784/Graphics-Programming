@@ -5,12 +5,18 @@ var atmosphereSize;
 var earthLoc;
 var earthSize;
 var starLocs = [];
+var score = 0;
+var startTime;
+var currentTime;
 
 //////////////////////////////////////////////////
 function setup() {
   createCanvas(1200, 800);
   spaceship = new Spaceship();
   asteroids = new AsteroidSystem();
+
+  //Start time since sketch has been running
+  startTime = millis();
 
   //location and size of earth and its atmosphere
   atmosphereLoc = new createVector(width / 2, height * 2.9);
@@ -27,6 +33,15 @@ function draw() {
 
   spaceship.run();
   asteroids.run();
+
+  fill(255);
+  textSize(40);
+  text( "Score " + score, 50, height / 13);
+
+  //Store current time in seconds
+  var currentTime = int((millis() - startTime)/1000);
+  console.log(currentTime)
+  speedAsteroids(currentTime);
 
   drawEarth();
 
@@ -49,8 +64,10 @@ function drawEarth() {
 //checks collisions between all types of bodies
 function checkCollisions(spaceship, asteroids) {
   //YOUR CODE HERE (2-3 lines approx)
+
+  //spaceship-2-asteroid collisions
   for (var i = 0; i < asteroids.locations.length; i++) {
-    //spaceship-2-asteroid collisions
+    //If the spaceship collides into an asteroid, end the game
     if (
       isInside(
         spaceship.location,
@@ -62,8 +79,9 @@ function checkCollisions(spaceship, asteroids) {
       gameOver();
   }
 
+  //asteroid-2-earth collisions
   for (var i = 0; i < asteroids.locations.length; i++) {
-    //asteroid-2-earth collisions
+    //If the asteroid collides with earth, end the game
     if (
       isInside(
         earthLoc,
@@ -76,10 +94,12 @@ function checkCollisions(spaceship, asteroids) {
   }
 
   //spaceship-2-earth
+  //If the spaceship collides with earth, end the game
   if (isInside(earthLoc, earthSize.x, spaceship.location, spaceship.size))
     gameOver();
 
   //spaceship-2-atmosphere
+  //If the spaceship is inside the atmosphere, call setNearEarth to apply gravity to the spaceship
   if (
     isInside(
       atmosphereLoc,
@@ -90,18 +110,21 @@ function checkCollisions(spaceship, asteroids) {
   )
     spaceship.setNearEarth();
 
-  for (var i = 0; i < asteroids.locations.length; i++) {
-    for (var j = 0; j < spaceship.bulletSys.bullets.length; j++) {
-      //bullet collisions
+  //bullet collisions
+  for (var i = 0; i < spaceship.bulletSys.bullets.length; i++) {
+    for (var j = 0; j < asteroids.locations.length; j++) {
+      //If the distance between the asteroid and the bullet is less than the diameters, remove the asteroid
       if (
         isInside(
-          asteroids.locations[i],
-          asteroids.diams[i],
-          spaceship.bulletSys.bullets[j],
+          asteroids.locations[j],
+          asteroids.diams[j],
+          spaceship.bulletSys.bullets[i],
           spaceship.bulletSys.diam
         )
       ) {
-        asteroids.destroy(i);
+        //Updates the score and destroy the asteroid
+        score ++;
+        asteroids.destroy(j);
       }
     }
   }
@@ -151,4 +174,15 @@ function sky() {
 
   if (random(1) < 0.3) starLocs.splice(int(random(starLocs.length)), 1);
   pop();
+}
+
+//Speeds up asteroids after 15 seconds
+function speedAsteroids(currentTime){
+
+  var force = new createVector(0, 0.01);
+  if(currentTime > 15)
+  {
+    asteroids.applyForce(force);
+  }
+
 }
