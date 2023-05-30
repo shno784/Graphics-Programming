@@ -7,7 +7,9 @@ var Engine = Matter.Engine,
 
     var engine;
     var box1;
-    var ground;
+    var ground1, ground2;
+
+    var circle;
 
 
 
@@ -18,10 +20,14 @@ function setup() {
 
     box1 = Bodies.rectangle(200, 200, 80, 80, {restitution: .8, friction: 0.5});
 
-    var options = {isStatic: true, angle: Math.PI * 0.06};
-    ground = Bodies.rectangle(400,500,810,10, options);
+
+    circle = Bodies.circle(80, 0, 20);
+    ground1 = Bodies.rectangle(100,200,500,10, {isStatic: true, angle: Math.PI * 0.06});
+    ground2 = Bodies.rectangle(500,500,590,10, {isStatic: true, angle: -Math.PI * 0.06});
+
+
     // add all of the bodies to the world
-Composite.add(engine.world, [box1, ground]);
+Composite.add(engine.world, [box1, ground1, ground2, circle]);
 
 }
 
@@ -31,9 +37,11 @@ function draw() {
 
     fill(255)
     drawVertices(box1.vertices);
+    drawVertices(circle.vertices);
 
     fill(125)
-    drawVertices(ground.vertices);
+    drawVertices(ground1.vertices);
+    drawVertices(ground2.vertices);
 }
 
 

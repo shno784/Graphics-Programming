@@ -1,1 +1,0 @@
-# UOL Graphics Programming items
