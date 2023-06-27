@@ -62,7 +62,7 @@ class Spaceship {
   }
 
   setNearEarth(){
-    //Applies a downward force of 0.05 to the space ship
+    //Applies a downward force of 0.05 to the spaceship
     this.applyForce(createVector(0, 0.05));
     var friction = this.velocity.copy();
     //Multiply the velocity by -1 to make it opposite then multiply again by 1/30 to ensure that it is 30
