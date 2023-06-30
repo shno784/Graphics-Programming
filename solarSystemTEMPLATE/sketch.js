@@ -10,29 +10,37 @@ function draw() {
 
     // SUN
     translate(width/2, height/2);
-    push();
-    rotate(radians(speed/3))
+
+    push();//Start current transformation state of the sun
+    rotate(radians(speed/3)) // Rotate the sun around its axis
     celestialObj(color(255,150,0), 200); 
+    pop();// Restore original state
 
     // EARTH
-    translate(300, 0);
-    rotate(radians(speed));  
-    celestialObj(color(0, 0, 255), 80); 
-     
+    push();//Start current transformation state of the earth
+    rotate(radians(speed)); //Rotate the earth around the sun
+    translate(300, 0); //Earth orbit sun at 300 pixels
+
+    push();//Start current transformation for earth rotation
+    rotate(radians(speed)); // rotate earth around its axis
+    celestialObj(color(0, 0, 255), 80); //EARTH
+    pop();// Restore current transformation for earth rotation
+
     // MOON
-    rotate(radians(-speed * 2));  
+    push();//Start current transformation state of the moon
+    rotate(radians(-speed * 2)); //Rotate the moon around the sun
     translate(100, 0);
+
+    // push();//Save current transformation state for moon's rotation
     rotate(radians(-speed * 2)); 
     celestialObj(255, 30); 
+    
+    pop(); // Restore transformation of state of the earth
+    pop(); //restore transformation of the state of the moon
 
-    // Asteroid
-    rotate(radians(-speed * 3));
-    translate(45, 0);
-    celestialObj(120, 20);
-
-    pop();
 }
 
+//Draw celestial shapes
 function celestialObj(c, size){
     strokeWeight(5);
     fill(c);
@@ -40,6 +48,3 @@ function celestialObj(c, size){
     ellipse(0, 0, size, size);
     line(0, 0, size/2, 0);
 }
-
-
-
