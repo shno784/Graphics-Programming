@@ -11,9 +11,14 @@ function draw() {
     // SUN
     translate(width/2, height/2);
 
+
     push();//Start current transformation state of the sun
+    //I wrote this code
     rotate(radians(speed/3)) // Rotate the sun around its axis
+    //End of writing code
     celestialObj(color(255,150,0), 200); 
+
+    //I wrote this code
     pop();// Restore original state
 
     // EARTH
@@ -24,7 +29,7 @@ function draw() {
     push();//Start current transformation for earth rotation
     rotate(radians(speed)); // rotate earth around its axis
     celestialObj(color(0, 0, 255), 80); //EARTH
-    pop();// Restore current transformation for earth rotation
+    pop();// Restore  originial state qwllfor earth rotation
 
     // MOON
     push();//Start current transformation state of the moon
@@ -35,9 +40,12 @@ function draw() {
     rotate(radians(-speed * 2)); 
     celestialObj(255, 30); 
     
-    pop(); // Restore transformation of state of the earth
-    pop(); //restore transformation of the state of the moon
+    pop(); // Restore original state of the earth
 
+    //End of writing code
+    pop(); //restore original state of the moon
+
+    
 }
 
 //Draw celestial shapes
