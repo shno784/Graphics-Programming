@@ -34,15 +34,17 @@ function draw() {
   spaceship.run();
   asteroids.run();
 
+  //I wrote this code
   fill(255);
   textSize(40);
   text( "Score " + score, 50, height / 13);
 
+
   //Store current time in seconds
   var currentTime = int((millis() - startTime)/1000);
-  console.log(currentTime)
   speedAsteroids(currentTime);
 
+  //End of writing code
   drawEarth();
 
   checkCollisions(spaceship, asteroids); // function that checks collision between various elements
@@ -64,6 +66,8 @@ function drawEarth() {
 //checks collisions between all types of bodies
 function checkCollisions(spaceship, asteroids) {
   //YOUR CODE HERE (2-3 lines approx)
+
+  //I wrote this code
 
   //spaceship-2-asteroid collisions
   for (var i = 0; i < asteroids.locations.length; i++) {
@@ -142,6 +146,8 @@ function isInside(locA, sizeA, locB, sizeB) {
   return false;
 }
 
+//End of writing this code
+
 //////////////////////////////////////////////////
 function keyPressed() {
   if (keyIsPressed && keyCode === 32) {
@@ -176,6 +182,8 @@ function sky() {
   pop();
 }
 
+//I wrote this code
+
 //Speeds up asteroids after 15 seconds
 function speedAsteroids(currentTime){
 
@@ -186,3 +194,5 @@ function speedAsteroids(currentTime){
   }
 
 }
+
+//End of writing this code

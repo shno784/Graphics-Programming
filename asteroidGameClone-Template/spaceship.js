@@ -36,6 +36,7 @@ class Spaceship {
   }
 
   interaction(){
+    //I wrote this code
       if (keyIsDown(LEFT_ARROW)){
         this.applyForce(createVector(-0.1, 0));
       }
@@ -48,6 +49,7 @@ class Spaceship {
       if (keyIsDown(DOWN_ARROW)){
         this.applyForce(createVector(0, 0.1));
       }
+      //End of writing this code
   }
 
   fire(){
@@ -61,6 +63,7 @@ class Spaceship {
     else if (this.location.y>height) this.location.y = 0;
   }
 
+  // I wrote this code
   setNearEarth(){
     //Applies a downward force of 0.05 to the spaceship
     this.applyForce(createVector(0, 0.05));
@@ -71,4 +74,5 @@ class Spaceship {
     friction.mult(1/30)
     this.applyForce(friction)
   }
+  //End of writing this code
 }
