@@ -5,7 +5,7 @@ class Spaceship {
     this.location = new createVector(width/2, height/2);
     this.acceleration = new createVector(0, 0);
     this.maxVelocity = 5;
-    this.bulletSys = new BulletSystem();
+    this.bulletSys = new BulletSystem(-5, 5, "red");
     this.size = 30;
     this.isAccelerating = false;
   }

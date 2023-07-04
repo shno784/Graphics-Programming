@@ -1,60 +1,45 @@
-/* 
-Boss should come from the top, stop at a certain height and move left and right
-
-Boss has 20 HP
-
-Boss spawns every 20 kills
-
-*/
 
 class Boss {
 
     constructor(){
         this.velocity = new createVector(0, 0);
-        this.location = new createVector(width/2, height/2);
-        this.acceleration = new createVector(2, 0);
+        this.location = new createVector(width/2, height/6);
+        this.acceleration = new createVector(3, 0);
         this.maxVelocity = 5;
-        this.bulletSys = new BulletSystem();
-        this.size = 100;
+        this.bulletSys = new BulletSystem(5, 15, "pink");
+        this.size = 170;
     }
 
     run(){
         this.bulletSys.run();
         this.draw();
+        this.spawn();
         this.move();
-        this.bounce();
+        this.fire();
     }
 
     draw(){
-    
-        //Inspired by "hack_it_robot_1 University of London"
-        strokeWeight(5);
- 
-        //Boss head
-        fill(192,199,19);
-        rect(this.location.x - this.size , this.location.y, this.size  * 3, this.size);
-      
-        //Boss eyes
+
+        //Wings
+        fill(255, 0, 0);
+        ellipse(this.location.x, this.location.y, this.size * 2, this.size / 5)
+        
+        //face
         fill(255);
-        //Left eye
-        ellipse(this.location.x , this.location.y + this.size / 3, this.size, this.size);
-        //Right eye
-        ellipse(this.location.x + this.size, this.location.y + this.size / 3, this.size, this.size);
+        ellipse(this.location.x, this.location.y, this.size);
 
-        fill(0)
-        //Left eye
-        ellipse(this.location.x, this.location.y + this.size / 3, 60, 60);
-        ellipse(this.location.x, this.location.y + this.size / 3, 40, 40);
-        ellipse(this.location.x, this.location.y + this.size / 3, 20, 20);
+        //Cheeks
+        fill(255, 182, 193);
+        //Right cheek
+        ellipse(this.location.x + this.size / 3, this.location.y + 20, this.size / 6);
+        //Left cheek
+        ellipse(this.location.x - this.size / 3, this.location.y + 20, this.size / 6);
 
-        //Right eye 
-        ellipse(this.location.x + this.size, this.location.y + this.size / 3, 60, 60);
-        ellipse(this.location.x + this.size, this.location.y + this.size / 3, 40, 40);
-        ellipse(this.location.x + this.size, this.location.y + this.size / 3, 20, 20);
-    
-        //Boss mouth
-        fill(192);
-        ellipse(this.location.x + this.size / 2, this.location.y + this.size / 1.3, this.size, 60);
+        //Nose
+        fill(255, 0, 0);
+        ellipse(this.location.x, this.location.y, this.size / 4, this.size / 2);
+
+
     }
 
     move(){
@@ -62,18 +47,33 @@ class Boss {
         this.location.add(this.velocity);
         this.acceleration.mult(0)
         this.velocity.limit(this.maxVelocity);
+
     }
+
 
     fire(){
-        this.bulletSys.fire(random(this.location.x - 20, this.location.x + 20), this.location.y)
+        //Shoots a bullet every 100 frames
+        if(frameCount % 50 == 0){
+            this.bulletSys.fire(this.location.x, this.location.y)
+        }
+       
     }
 
-    bounce(){
-        //If the boss reaches to the end of the screen, bounce him backwards
-        if (this.location.x > width - 200) {
-            this.location.x = width;
+    spawn(){
+        //Bounce the boss off the walls
+        if (this.location.x + this.size > width) {
+            this.velocity.x *= -1;
+
+        } else if (this.location.x - this.size <= 0) {
             this.velocity.x *= -1;
         }
+        
     }
-    //REFER BACK TO THE BOUNCING BALL TO GET IT TO BOUNCE OFF THE WALL.
+      //destroys all data associated with each asteroid
+  destroy(index){
+    this.locations.splice(index,1);
+    this.velocities.splice(index,1);
+    this.accelerations.splice(index,1);
+    this.diams.splice(index,1);
+  }
 }

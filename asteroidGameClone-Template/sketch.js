@@ -38,12 +38,10 @@ function draw() {
   asteroids.run();
 
 
-
   //I wrote this code
   fill(255);
   textSize(40);
   text( "Score " + score, 50, height / 13);
-
 
   //Store current time in seconds
   var currentTime = int((millis() - startTime)/1000);
@@ -134,7 +132,23 @@ function checkCollisions(spaceship, asteroids) {
         //Updates the score and destroy the asteroid
         score ++;
         asteroids.destroy(j);
+        boss = null;
       }
+    }
+  }
+
+  //boss bullet with spaceship
+  for(var i = 0; i < boss.bulletSys.bullets.length; i++){
+    if(isInside(boss.bulletSys.bullets[i], boss.bulletSys.diam, spaceship.location, spaceship.size)){
+    // gameOver();
+    }
+  }
+
+
+  //bullet touching boss
+  for(var i = 0; i < spaceship.bulletSys.bullets.length; i++){
+    if (isInside(spaceship.bulletSys.bullets[i], spaceship.bulletSys.diam, boss.location, boss.size )){
+      console.log("touch")
     }
   }
 }

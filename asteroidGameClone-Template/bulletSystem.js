@@ -1,9 +1,10 @@
 class BulletSystem {
 
-  constructor(){
+  constructor(bulletDirection, bulletDiameter, bulletColour){
     this.bullets = [];
-    this.velocity = new createVector(0, -5);
-    this.diam = 5;
+    this.velocity = new createVector(0, bulletDirection);
+    this.diam = bulletDiameter;
+    this.color = bulletColour;
   }
 
   run(){
@@ -18,7 +19,7 @@ class BulletSystem {
 
   //draws all bullets
   draw(){
-    fill(255);
+    fill(this.color);
     for (var i=0; i<this.bullets.length; i++){
       ellipse(this.bullets[i].x, this.bullets[i].y, this.diam, this.diam * 5);
     }
