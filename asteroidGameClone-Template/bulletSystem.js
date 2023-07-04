@@ -3,7 +3,7 @@ class BulletSystem {
   constructor(){
     this.bullets = [];
     this.velocity = new createVector(0, -5);
-    this.diam = 10;
+    this.diam = 5;
   }
 
   run(){
@@ -20,7 +20,7 @@ class BulletSystem {
   draw(){
     fill(255);
     for (var i=0; i<this.bullets.length; i++){
-      ellipse(this.bullets[i].x, this.bullets[i].y, this.diam, this.diam);
+      ellipse(this.bullets[i].x, this.bullets[i].y, this.diam, this.diam * 5);
     }
   }
 
@@ -36,11 +36,13 @@ class BulletSystem {
       // I wrote this code
       for(var i = 0; i < this.bullets.length; i++)
       {
+        //If the bullet is off the screen (y position less than 0) remove it from the array
         if(this.bullets[i].y <= 0)
         {
           this.bullets.splice(0,1);
         }
       }
-      //End of writing this code
+
   }
+  //End of writing this code
 }

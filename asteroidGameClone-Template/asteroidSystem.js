@@ -44,7 +44,8 @@ class AsteroidSystem {
     noStroke();
     fill(200);
     for (var i=0; i<this.locations.length; i++){
-      ellipse(this.locations[i].x, this.locations[i].y, this.diams[i], this.diams[i]);
+
+      ellipse(this.locations[i].x, this.locations[i].y, random(this.diams[i] -5, this.diams[i] + 5), this.diams[i]);
     }
   }
 

@@ -8,12 +8,14 @@ var starLocs = [];
 var score = 0;
 var startTime;
 var currentTime;
+var boss;
 
 //////////////////////////////////////////////////
 function setup() {
   createCanvas(1200, 800);
   spaceship = new Spaceship();
   asteroids = new AsteroidSystem();
+  boss = new Boss();
 
   //Start time since sketch has been running
   startTime = millis();
@@ -31,8 +33,11 @@ function draw() {
 
   sky();
 
+  boss.run();
   spaceship.run();
   asteroids.run();
+
+
 
   //I wrote this code
   fill(255);
@@ -183,12 +188,11 @@ function sky() {
 }
 
 //I wrote this code
-
-//Speeds up asteroids after 15 seconds
 function speedAsteroids(currentTime){
 
-  var force = new createVector(0, 0.01);
-  if(currentTime > 15)
+  var force = new createVector(0, 0.001);
+  //Apply force every 60 seconds
+  if((currentTime % 60) == 0)
   {
     asteroids.applyForce(force);
   }

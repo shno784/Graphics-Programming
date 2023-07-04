@@ -6,7 +6,8 @@ class Spaceship {
     this.acceleration = new createVector(0, 0);
     this.maxVelocity = 5;
     this.bulletSys = new BulletSystem();
-    this.size = 50;
+    this.size = 30;
+    this.isAccelerating = false;
   }
 
   run(){
@@ -18,11 +19,34 @@ class Spaceship {
   }
 
   draw(){
-    fill(125);
-    triangle(this.location.x - this.size/2, this.location.y + this.size/2,
-        this.location.x + this.size/2, this.location.y + this.size/2,
-        this.location.x, this.location.y - this.size/2);
+
+    //Ship drawing from https://editor.p5js.org/ri1/sketches/HhwycpKut
+    
+    //Flame
+    noStroke();
+    //If the ship is accelerating, show the flame
+    if(this.isAccelerating){
+      fill(255,185,0);
+      ellipse(this.location.x, this.location.y + this.size / 2, 
+              this.size / 1.5, this.size * 2)
+  
+    }
+
+    //Rocket arc
+    fill(30,144,255);
+    arc(this.location.x, this.location.y + this.size / 1.2, 
+        this.size * 1.5, this.size * 1.5, PI, 0, CHORD)
+
+    //Ship body
+    fill(255, 0, 0);
+    ellipse(this.location.x, this.location.y, this.size, this.size * 2)
+
+    //Windows
+    fill(255);
+    ellipse(this.location.x, this.location.y - 10, this.size / 2);
+    ellipse(this.location.x, this.location.y + 10, this.size / 2);
   }
+
 
   move(){
     this.velocity.add(this.acceleration);
@@ -45,9 +69,11 @@ class Spaceship {
       }
       if (keyIsDown(UP_ARROW)){
         this.applyForce(createVector(0, -0.1));
+        this.isAccelerating = true;
       }
       if (keyIsDown(DOWN_ARROW)){
         this.applyForce(createVector(0, 0.1));
+        this.isAccelerating = false;
       }
       //End of writing this code
   }

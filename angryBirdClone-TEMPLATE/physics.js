@@ -50,7 +50,7 @@ function drawBirds(){
   //your code here
   for(var i = 0; i < birds.length; i++){
 
-    fill('purple')
+    fill(255,15,123)
     drawVertices(birds[i].vertices)
     if(isOffScreen(birds[i])){
       removeFromWorld(birds[i]);
