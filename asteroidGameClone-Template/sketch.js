@@ -7,9 +7,9 @@ After the boss is defeated, the game resumes its regular course. Moreover, I imp
 The spaceship underwent a remodeling process, changing its appearance. Additionally, the spaceshi's bullets were revamped. The BulletSystem class was also
 revamped to allow for the change of colour and shape for the boss' and spaceship's bullets.
 
-To intensify the gameplay a little further, the asteroids gain speed every 30 seconds. These improvements collectively better the game's dynamics,
+To intensify the gameplay a little further, the asteroids gain speed every 30 seconds while also adding a song to the game to give it a classic feeling.
+These improvements collectively better the game's dynamics,
 offering players more engaging adventure.
-
 */
 
 var spaceship;
@@ -25,6 +25,12 @@ var startTime;
 var currentTime;
 var boss;
 var bossSpawned = false;
+var Sound;
+
+function preload() {
+  soundFormats("mp3");
+  Sound = loadSound("assets/gameSound");
+}
 //End of writing this code
 
 //////////////////////////////////////////////////
@@ -32,10 +38,17 @@ function setup() {
   createCanvas(1200, 800);
   spaceship = new Spaceship();
   asteroids = new AsteroidSystem();
+  //I wrote this code
   boss = new Boss();
 
   //Start time since sketch has been running
   startTime = millis();
+
+  //Play the song while the game is playing
+  if (!Sound.isPlaying()) {
+    Sound.play();
+  }
+  //End of writing this code
 
   //location and size of earth and its atmosphere
   atmosphereLoc = new createVector(width / 2, height * 2.9);
@@ -83,7 +96,6 @@ function drawEarth() {
 //////////////////////////////////////////////////
 //checks collisions between all types of bodies
 function checkCollisions(spaceship, asteroids, boss) {
-
   //I wrote this code
 
   //spaceship-2-asteroid collisions
@@ -162,7 +174,7 @@ function checkCollisions(spaceship, asteroids, boss) {
           spaceship.size
         )
       ) {
-          gameOver();
+        gameOver();
       }
     }
 
@@ -185,7 +197,7 @@ function checkCollisions(spaceship, asteroids, boss) {
     if (
       isInside(spaceship.location, spaceship.size, boss.location, boss.size)
     ) {
-        gameOver();
+      gameOver();
     }
   }
 }
@@ -220,6 +232,10 @@ function gameOver() {
   textAlign(CENTER);
   text("GAME OVER", width / 2, height / 2);
   noLoop();
+  //I wrote this code
+  //Stops the song
+  Sound.stop();
+  //End of writing this code
 }
 
 //////////////////////////////////////////////////
