@@ -1,3 +1,17 @@
+/*
+I made several enhancements to the game. Firstly, I introduced a boss that emerges after 30 seconds. This boss possesses 20 life points,
+requiring the player to shoot it 20 times for its defeat. To heighten the challenge, the spaceship msut avoid collsiion with the boss,
+as well as evade the boss' bullets and the asteroids at the same time, as these occurences will result in a game over.
+
+After the boss is defeated, the game resumes its regular course. Moreover, I implemented a scoring system to track the player's progress.
+The spaceship underwent a remodeling process, changing its appearance. Additionally, the spaceshi's bullets were revamped. The BulletSystem class was also
+revamped to allow for the change of colour and shape for the boss' and spaceship's bullets.
+
+To intensify the gameplay a little further, the asteroids gain speed every 30 seconds. These improvements collectively better the game's dynamics,
+offering players more engaging adventure.
+
+*/
+
 var spaceship;
 var asteroids;
 var atmosphereLoc;
@@ -5,10 +19,13 @@ var atmosphereSize;
 var earthLoc;
 var earthSize;
 var starLocs = [];
+//I wrote this code
 var score = 0;
 var startTime;
 var currentTime;
 var boss;
+var bossSpawned = false;
+//End of writing this code
 
 //////////////////////////////////////////////////
 function setup() {
@@ -33,24 +50,22 @@ function draw() {
 
   sky();
 
-  boss.run();
   spaceship.run();
   asteroids.run();
 
-
   //I wrote this code
-  fill(255);
-  textSize(40);
-  text( "Score " + score, 50, height / 13);
 
   //Store current time in seconds
-  var currentTime = int((millis() - startTime)/1000);
+  var currentTime = int((millis() - startTime) / 1000);
+
   speedAsteroids(currentTime);
+  showScore();
+  showBoss(currentTime);
 
   //End of writing code
   drawEarth();
 
-  checkCollisions(spaceship, asteroids); // function that checks collision between various elements
+  checkCollisions(spaceship, asteroids, boss); // function that checks collision between various elements
 }
 
 //////////////////////////////////////////////////
@@ -67,8 +82,7 @@ function drawEarth() {
 
 //////////////////////////////////////////////////
 //checks collisions between all types of bodies
-function checkCollisions(spaceship, asteroids) {
-  //YOUR CODE HERE (2-3 lines approx)
+function checkCollisions(spaceship, asteroids, boss) {
 
   //I wrote this code
 
@@ -117,7 +131,7 @@ function checkCollisions(spaceship, asteroids) {
   )
     spaceship.setNearEarth();
 
-  //bullet collisions
+  //bullet touching asteroid
   for (var i = 0; i < spaceship.bulletSys.bullets.length; i++) {
     for (var j = 0; j < asteroids.locations.length; j++) {
       //If the distance between the asteroid and the bullet is less than the diameters, remove the asteroid
@@ -130,25 +144,48 @@ function checkCollisions(spaceship, asteroids) {
         )
       ) {
         //Updates the score and destroy the asteroid
-        score ++;
+        score++;
         asteroids.destroy(j);
-        boss = null;
       }
     }
   }
 
-  //boss bullet with spaceship
-  for(var i = 0; i < boss.bulletSys.bullets.length; i++){
-    if(isInside(boss.bulletSys.bullets[i], boss.bulletSys.diam, spaceship.location, spaceship.size)){
-    // gameOver();
+  //Collisions only done if the boss is spawned
+  if (bossSpawned) {
+    //boss bullet touching spaceship
+    for (var i = 0; i < boss.bulletSys.bullets.length; i++) {
+      if (
+        isInside(
+          boss.bulletSys.bullets[i],
+          boss.bulletSys.diam,
+          spaceship.location,
+          spaceship.size
+        )
+      ) {
+          gameOver();
+      }
     }
-  }
 
+    //bullet touching boss
+    for (var i = 0; i < spaceship.bulletSys.bullets.length; i++) {
+      if (
+        isInside(
+          spaceship.bulletSys.bullets[i],
+          spaceship.bulletSys.diam,
+          boss.location,
+          boss.size
+        )
+      ) {
+        boss.hp--;
+        spaceship.bulletSys.destroy();
+      }
+    }
 
-  //bullet touching boss
-  for(var i = 0; i < spaceship.bulletSys.bullets.length; i++){
-    if (isInside(spaceship.bulletSys.bullets[i], spaceship.bulletSys.diam, boss.location, boss.size )){
-      console.log("touch")
+    //Spaceship touching boss
+    if (
+      isInside(spaceship.location, spaceship.size, boss.location, boss.size)
+    ) {
+        gameOver();
     }
   }
 }
@@ -156,7 +193,7 @@ function checkCollisions(spaceship, asteroids) {
 //////////////////////////////////////////////////
 //helper function checking if there's collision between object A and object B
 function isInside(locA, sizeA, locB, sizeB) {
-  // YOUR CODE HERE (3-5 lines approx)
+  //calculate the distance between location A and B
   var distance = dist(locA.x, locA.y, locB.x, locB.y);
 
   if (distance < sizeA / 2 + sizeB / 2) {
@@ -202,15 +239,31 @@ function sky() {
 }
 
 //I wrote this code
-function speedAsteroids(currentTime){
-
+//Increase asteroid speed
+function speedAsteroids(currentTime) {
   var force = new createVector(0, 0.001);
-  //Apply force every 60 seconds
-  if((currentTime % 60) == 0)
-  {
+  //Apply force every 30 seconds
+  if (currentTime % 30 == 0) {
     asteroids.applyForce(force);
   }
-
 }
 
+//Show the score
+function showScore() {
+  fill(255, 0, 0);
+  textSize(30);
+  text("Score " + score, width / 30, height / 20);
+}
+
+//Show the boss
+function showBoss(currentTime) {
+  //spawn boss after 30 seconds
+  if (currentTime > 30) {
+    boss.run();
+    bossSpawned = true;
+  }
+
+  //Delete boss when hp reaches 0
+  if (boss.hp <= 0) bossSpawned = false;
+}
 //End of writing this code
