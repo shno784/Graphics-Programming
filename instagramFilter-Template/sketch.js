@@ -1,5 +1,11 @@
 // Image of Husky Creative commons from Wikipedia:
 // https://en.wikipedia.org/wiki/Dog#/media/File:Siberian_Husky_pho.jpg
+
+/*Added two filters, a grayscale filter and a edge detection filter.
+These were implemented by using an if statement and doing the regular functions
+to get these filters (from class) and when a key is presssed, the currentFilter will
+switch to the appropriate flag and redraw the draw function to show the new filter
+*/
 var imgIn;
 var matrix = [
     [1/64, 1/64, 1/64, 1/64, 1/64, 1/64, 1/64, 1/64],
@@ -11,6 +17,20 @@ var matrix = [
     [1/64, 1/64, 1/64, 1/64, 1/64, 1/64, 1/64, 1/64],
     [1/64, 1/64, 1/64, 1/64, 1/64, 1/64, 1/64, 1/64]
 ];
+//horizontal edge detection / vertical lines
+var matrixX = [    // in javascript format
+    [-1, -2, -1],
+    [0, 0, 0],
+    [1, 2, 1]
+];
+//vertical edge detection / horizontal lines
+var matrixY = [
+    [-1, 0, 1],
+    [-2, 0, 2],
+    [-1, 0, 1]
+];
+
+var currentFilter = 1;
 /////////////////////////////////////////////////////////////////
 function preload() {
     imgIn = loadImage("assets/husky.jpg");
@@ -18,12 +38,25 @@ function preload() {
 /////////////////////////////////////////////////////////////////
 function setup() {
     createCanvas((imgIn.width * 2), imgIn.height);
+    
 }
 /////////////////////////////////////////////////////////////////
 function draw() {
     background(125);
+
     image(imgIn, 0, 0);
-    image(earlyBirdFilter(imgIn), imgIn.width, 0);
+
+    if(currentFilter == 1) {
+      image(earlyBirdFilter(imgIn), imgIn.width, 0);
+      //Press '1' to switch to this filter
+    } else if (currentFilter == 2) {
+      image(grayScale(imgIn), imgIn.width, 0);
+      //Press '2' to switch to this filter      
+    } else if (currentFilter == 3) {
+      imgIn.filter(GRAY);
+      image(edgeDetection(imgIn), imgIn.width, 0);
+      //Press '3' to switch to this filter
+    }
     noLoop();
 }
 /////////////////////////////////////////////////////////////////
@@ -31,7 +64,22 @@ function mousePressed(){
   loop();
 }
 /////////////////////////////////////////////////////////////////
-function earlyBirdFilter(img){
+function keyPressed(){
+
+  //After pressing the correct key, redraw the draw function to show the filter
+  if (key == '1') {
+    currentFilter = 1;
+    redraw();
+  } else if (key == '2') {
+    currentFilter = 2;
+    redraw();
+  } else if (key == '3') {
+    currentFilter = 3;
+    redraw();
+  }
+}
+/////////////////////////////////////////////////////////////////
+function earlyBirdFilter(imgIn){
   var resultImg = createImage(imgIn.width, imgIn.height);
   resultImg = sepiaFilter(imgIn);
   resultImg = darkCorners(resultImg);
@@ -138,7 +186,7 @@ function radialBlurFilter(img){
   imgOut.updatePixels();
   return imgOut;
 }
-/////////////////////////////////////////////////////////////////////////
+
 function convolution(x, y, matrix, matrixSize, img) {
     var totalRed = 0.0;
     var totalGreen = 0.0;
@@ -178,4 +226,69 @@ function borderFilter(img) {
 
 
   return buffer;
+}
+
+function grayScale(img) {
+  var resultImg = createImage(img.width, img.height);
+  resultImg = grayscaleFilter(img);
+  resultImg = borderFilter(resultImg);
+
+  return resultImg;
+}
+function grayscaleFilter(img) {
+  var imgOut = createImage(img.width, img.height);
+  imgOut.loadPixels();
+  img.loadPixels();
+
+  for (x = 0; x < imgOut.width; x++) {
+      for (y = 0; y < imgOut.height; y++) {
+
+          var index = (x + y * imgOut.width) * 4;
+
+          var r = img.pixels[index + 0];
+          var g = img.pixels[index + 1];
+          var b = img.pixels[index + 2];
+
+          var gray = r * 0.299 + g * 0.587 + b * 0.114; // LUMA ratios 
+
+          imgOut.pixels[index+0]= imgOut.pixels[index+1] = imgOut.pixels[index+2] = gray;
+          imgOut.pixels[index+3]= 255;
+      }
+  }
+  imgOut.updatePixels();
+  return imgOut;
+}
+function edgeDetection (img) {
+  var resultImg = createImage(img.width, img.height);
+  resultImg = edgeDetectionFilter(img);
+  resultImg = borderFilter(resultImg);
+  return resultImg;
+}
+function edgeDetectionFilter(img) {
+  var imgOut = createImage(img.width, img.height);
+  var matrixSize = matrixX.length;
+
+  imgOut.loadPixels();
+  img.loadPixels();
+
+  // read every pixel
+  for (var x = 0; x < imgOut.width; x++) {
+      for (var y = 0; y < imgOut.height; y++) {
+
+          var index = (x + y * imgOut.width) * 4;
+          var cX = convolution(x, y, matrixX, matrixSize, img);
+          var cY = convolution(x, y, matrixY, matrixSize, img);
+
+          cX = map(abs(cX[0]), 0, 1020, 0, 255);
+          cY = map(abs(cY[0]), 0, 1020, 0, 255);
+          var combo = cX + cY;
+
+          imgOut.pixels[index + 0] = combo;
+          imgOut.pixels[index + 1] = combo;
+          imgOut.pixels[index + 2] = combo;
+          imgOut.pixels[index + 3] = 255;
+      }
+  }
+  imgOut.updatePixels();
+  return imgOut;
 }
