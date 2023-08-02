@@ -1,6 +1,7 @@
 var imgs = [];
 var avgImg;
 var numOfImages = 30;
+var imageIndex = 0;
 
 //////////////////////////////////////////////////////////
 function preload() { // preload() runs once
@@ -23,7 +24,7 @@ function setup() {
 function draw() {
     background(125);
     //Draw image
-    image(imgs[0], 0, 0);
+    image(imgs[imageIndex], 0, 0);
 
     for(var i = 0; i < imgs.length; i++) {
         imgs[i].loadPixels();
@@ -68,4 +69,11 @@ function draw() {
 
 
     noLoop();
+}
+
+function keyPressed() {
+    if(keyCode == 32) { //spacebar pressed, change to a random image  
+        imageIndex = floor(random(0, 30));
+        loop();
+    } 
 }
