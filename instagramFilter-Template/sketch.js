@@ -349,12 +349,13 @@ function emboss(img) {
 
           cX = map(abs(cX[0]), 0, 1020, 0, 255);
           cY = map(abs(cY[0]), 0, 1020, 0, 255);
-          var combo = sqrt(cX * cX + cY * cY);
+          var combo = sqrt(cX * cX + cY * cY) * 2;
 
-          imgOut.pixels[index + 0] = combo + embossColor[0];
-          imgOut.pixels[index + 1] = combo + embossColor[1];
-          imgOut.pixels[index + 2] = combo + embossColor[2];
+          imgOut.pixels[index + 0] = combo + embossColor[0] * 5;
+          imgOut.pixels[index + 1] = combo + embossColor[1] * 5;
+          imgOut.pixels[index + 2] = combo + embossColor[2] * 5;
           imgOut.pixels[index + 3] = 255;
+          // REMOVE NUMBER 3 AND MERGE THIS AS NUMBER 3. ALSO YOU HAVE TO USE THE MOUSE TO PRESS SOMEWHERE WHICH WILL MAKE THE AREA MORE CONCENTRATED.
 
       }
   }
