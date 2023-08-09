@@ -18,17 +18,29 @@ var matrix = [
     [1/64, 1/64, 1/64, 1/64, 1/64, 1/64, 1/64, 1/64]
 ];
 //horizontal edge detection / vertical lines
-var matrixX = [    // in javascript format
+var matrixY = [ 
     [-1, -2, -1],
     [0, 0, 0],
     [1, 2, 1]
 ];
 //vertical edge detection / horizontal lines
-var matrixY = [
+var matrixX = [
     [-1, 0, 1],
     [-2, 0, 2],
     [-1, 0, 1]
 ];
+
+var embossMatrix = [
+  [0, 1, 0],
+  [0, 0, 0],
+  [0, -1, 0]
+];
+
+// var embossMatrix = [
+//   [-1, 0, 0],
+//   [0, 0, 0],
+//   [0, 0, 1]
+// ]
 
 var currentFilter = 1;
 /////////////////////////////////////////////////////////////////
@@ -38,6 +50,7 @@ function preload() {
 /////////////////////////////////////////////////////////////////
 function setup() {
     createCanvas((imgIn.width * 2), imgIn.height);
+    pixelDensity(1);
     
 }
 /////////////////////////////////////////////////////////////////
@@ -47,15 +60,16 @@ function draw() {
     image(imgIn, 0, 0);
 
     if(currentFilter == 1) {
-      image(earlyBirdFilter(imgIn), imgIn.width, 0);
-      //Press '1' to switch to this filter
+      image(earlyBirdFilter(imgIn), imgIn.width, 0);//Press '1' to switch to this filter
+      
     } else if (currentFilter == 2) {
-      image(grayScale(imgIn), imgIn.width, 0);
-      //Press '2' to switch to this filter      
+      image(grayScale(imgIn), imgIn.width, 0);//Press '2' to switch to this filter    
+  
     } else if (currentFilter == 3) {
-      imgIn.filter(GRAY);
-      image(edgeDetection(imgIn), imgIn.width, 0);
-      //Press '3' to switch to this filter
+      image(edgeDetection(imgIn), imgIn.width, 0);//Press '3' to switch to this filter
+      
+    } else if (currentFilter == 4) {
+      image(embossFilter(imgIn), imgIn.width, 0);//Press '4' to switch to this filter
     }
     noLoop();
 }
@@ -76,12 +90,15 @@ function keyPressed(){
   } else if (key == '3') {
     currentFilter = 3;
     redraw();
+  } else if (key == '4') {
+    currentFilter = 4;
+    redraw();
   }
 }
 /////////////////////////////////////////////////////////////////
-function earlyBirdFilter(imgIn){
-  var resultImg = createImage(imgIn.width, imgIn.height);
-  resultImg = sepiaFilter(imgIn);
+function earlyBirdFilter(img){
+  var resultImg = createImage(img.width, img.height);
+  resultImg = sepiaFilter(img);
   resultImg = darkCorners(resultImg);
   resultImg = radialBlurFilter(resultImg);
   resultImg = borderFilter(resultImg)
@@ -89,6 +106,9 @@ function earlyBirdFilter(imgIn){
 }
 
 function sepiaFilter(img) {
+  var imgOut = createImage(img.width, img.height);
+
+  imgOut.loadPixels();
   img.loadPixels();
 
   for(var x = 0; x < img.width; x++) {
@@ -107,14 +127,14 @@ function sepiaFilter(img) {
 
     
       //Put each value in the new image filter
-      img.pixels[index + 0] = newR
-      img.pixels[index + 1] = newG
-      img.pixels[index + 2] = newB
-      img.pixels[index + 3] = 255
+      imgOut.pixels[index + 0] = newR
+      imgOut.pixels[index + 1] = newG
+      imgOut.pixels[index + 2] = newB
+      imgOut.pixels[index + 3] = 255
     }
   }
-  img.updatePixels();
-  return img;
+  imgOut.updatePixels();
+  return imgOut;
 }
 
 function darkCorners(img) {
@@ -136,7 +156,7 @@ function darkCorners(img) {
        //Map the distance from 450 to the maximum distance of the image  to 0.4 to 0
        else dynLum = constrain(map(distance, 450, maxDistance, 0.4, 0), 0, 0.4);
 
-      
+
       //Append dynLum to the RGB values
       img.pixels[index + 0]*= dynLum;
       img.pixels[index + 1]*= dynLum;
@@ -231,6 +251,7 @@ function borderFilter(img) {
 function grayScale(img) {
   var resultImg = createImage(img.width, img.height);
   resultImg = grayscaleFilter(img);
+  resultImg = darkCorners(resultImg);2
   resultImg = borderFilter(resultImg);
 
   return resultImg;
@@ -281,12 +302,60 @@ function edgeDetectionFilter(img) {
 
           cX = map(abs(cX[0]), 0, 1020, 0, 255);
           cY = map(abs(cY[0]), 0, 1020, 0, 255);
-          var combo = cX + cY;
+          var combo = sqrt(cX * cX + cY * cY);
 
           imgOut.pixels[index + 0] = combo;
           imgOut.pixels[index + 1] = combo;
           imgOut.pixels[index + 2] = combo;
           imgOut.pixels[index + 3] = 255;
+      }
+  }
+  imgOut.updatePixels();
+  return imgOut;
+}
+
+function embossFilter (img) {
+  var resultImg = createImage(img.width, img.height);
+  resultImg = emboss(img);
+  resultImg = borderFilter(resultImg);
+  return resultImg;
+}
+
+function emboss(img) {
+  var imgOut = createImage(img.width, img.height);
+  var matrixSize = embossMatrix.length;
+
+  imgOut.loadPixels();
+  img.loadPixels();
+
+  // read every pixel
+  for (var x = 0; x < imgOut.width; x++) {
+      for (var y = 0; y < imgOut.height; y++) {
+
+           var index = (x + y * imgOut.width) * 4;
+          // var combo = convolution(x, y, embossMatrix, matrixSize, img);
+          // combo = combo[0];
+
+          // imgOut.pixels[index + 0] = combo + 128;
+          // imgOut.pixels[index + 1] = combo + 128;
+          // imgOut.pixels[index + 2] = combo + 128;
+          // imgOut.pixels[index + 3] = 255;
+
+
+
+          var embossColor = convolution(x, y, embossMatrix, 3, img);
+          var cX = convolution(x, y, matrixX, matrixSize, img);
+          var cY = convolution(x, y, matrixY, matrixSize, img);
+
+          cX = map(abs(cX[0]), 0, 1020, 0, 255);
+          cY = map(abs(cY[0]), 0, 1020, 0, 255);
+          var combo = sqrt(cX * cX + cY * cY);
+
+          imgOut.pixels[index + 0] = combo + embossColor[0];
+          imgOut.pixels[index + 1] = combo + embossColor[1];
+          imgOut.pixels[index + 2] = combo + embossColor[2];
+          imgOut.pixels[index + 3] = 255;
+
       }
   }
   imgOut.updatePixels();
