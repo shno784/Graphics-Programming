@@ -1,6 +1,7 @@
 var imgs = [];
 var avgImg;
 var numOfImages = 30;
+//I wrote this code
 var imageIndex = 0;
 
 //////////////////////////////////////////////////////////
@@ -74,3 +75,5 @@ function keyPressed() {
     loop();
   }
 }
+
+//End of writing this code

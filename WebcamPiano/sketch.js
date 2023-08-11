@@ -1,13 +1,13 @@
-// ********************************
-// BACKGROUND SUBTRACTION EXAMPLE *
-// ********************************
+
 var video;
 var prevImg;
 var diffImg;
 var currImg;
 var thresholdSlider;
 var threshold;
+//I wrote this code
 var grid;
+//End of writing this code
 
 function setup() {
   createCanvas(640 * 2, 480);
@@ -18,7 +18,9 @@ function setup() {
   thresholdSlider = createSlider(0, 255, 50);
   thresholdSlider.position(20, 20);
 
+  //I wrote this code
   grid = new Grid(640, 480);
+  //End of writing this code
 }
 
 function draw() {
@@ -37,11 +39,15 @@ function draw() {
     video.width,
     video.height
   );
+  //I wrote this code
   currImg.resize(currImg.width * 0.25, currImg.height * 0.25);
   currImg.filter(BLUR, 3);
+  //End of writing this code
 
   diffImg = createImage(video.width, video.height);
+  //I wrote this code
   diffImg.resize(diffImg.width * 0.25, diffImg.height * 0.25);
+  //End of writing this code
   diffImg.loadPixels();
 
   threshold = thresholdSlider.value();
@@ -90,6 +96,7 @@ function draw() {
   stroke(255);
   text(threshold, 160, 35);
 
+  //I wrote this code
   prevImg = createImage(currImg.width, currImg.height);
   prevImg.copy(
     currImg,
@@ -104,6 +111,7 @@ function draw() {
   );
 
   grid.run(diffImg);
+  //End of writing this code
 }
 
 // faster method for calculating color similarity which does not calculate root.

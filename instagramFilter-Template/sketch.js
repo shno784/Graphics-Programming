@@ -20,6 +20,9 @@ var matrix = [
   [1 / 64, 1 / 64, 1 / 64, 1 / 64, 1 / 64, 1 / 64, 1 / 64, 1 / 64],
   [1 / 64, 1 / 64, 1 / 64, 1 / 64, 1 / 64, 1 / 64, 1 / 64, 1 / 64],
 ];
+
+//I wrote this code
+
 //horizontal edge detection / vertical lines
 var matrixY = [
   [-1, -2, -1],
@@ -41,6 +44,8 @@ var embossMatrix = [
 ]
 var currentFilter = 1;
 var resetMouseFilter = false;
+//End of writing this code
+
 /////////////////////////////////////////////////////////////////
 function preload() {
   imgIn = loadImage("assets/husky.jpg");
@@ -55,7 +60,7 @@ function draw() {
   background(125);
 
   image(imgIn, 0, 0);
-
+  //I wrote this code
   if (currentFilter == 1) {
     image(earlyBirdFilter(imgIn), imgIn.width, 0); //Press '1' to switch to this filter
   } else if (currentFilter == 2) {
@@ -63,6 +68,7 @@ function draw() {
   } else if (currentFilter == 3) {
     image(embossFilter(imgIn), imgIn.width, 0); //Press '3' to switch to this filter
   }
+  //End of writing this Code
   noLoop();
 }
 /////////////////////////////////////////////////////////////////
@@ -70,6 +76,8 @@ function mousePressed() {
   loop();
 }
 /////////////////////////////////////////////////////////////////
+
+//I wrote this code
 function keyPressed() {
   //After pressing the correct key, redraw the draw function to show the filter
   if (key == "1") {
@@ -83,9 +91,12 @@ function keyPressed() {
     redraw();
   }
 }
+//End of writing this code
+
 /////////////////////////////////////////////////////////////////
 function earlyBirdFilter(img) {
   var resultImg = createImage(img.width, img.height);
+  //I wrote this code
   resultImg = sepiaFilter(img);
   resultImg = darkCorners(resultImg);
   resultImg = radialBlurFilter(resultImg);
@@ -308,3 +319,5 @@ function embossEdgeDetection(img) {
   imgOut.updatePixels();
   return imgOut;
 }
+
+//End of writing this code

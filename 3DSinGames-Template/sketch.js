@@ -1,3 +1,5 @@
+//I wrote this Code
+
 //Store location of each confetti
 var confLocs = [];
 //Store initial angle of each confetti
@@ -67,3 +69,5 @@ function confetti(confLocs, confTheta) {
     }
   }
 }
+
+//End of writing this code
