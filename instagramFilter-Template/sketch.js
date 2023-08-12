@@ -6,7 +6,8 @@ These were implemented by using an if statement and doing the regular functions 
 When a number is presssed, the currentFilter will
 switch to the appropriate function and redraw the draw function to show the new filter.
 The emboss filter with edge detection shows a regular emboss filter of the image with white lines to determine the edge in the image.
-This was done using an X and Y matrix to find the X and Y edge detections and an emboss matrix to emboss the image.
+The emboss filter was done using an X and Y matrix to find the X and Y edge detections and an emboss matrix to emboss the image, while the grayscale image
+was done by extracting the rgb values of each pixel from the image, multiplying them by a luma formula and adding them to the new image to show a gray colour.
 When the user clicks on a certain part of the left image, the right image will show a more contrasted image with colour in the area where the user clicked.
 */
 var imgIn;
@@ -265,7 +266,8 @@ function grayscaleFilter(img) {
       var g = img.pixels[index + 1];
       var b = img.pixels[index + 2];
 
-      var gray = r * 0.299 + g * 0.587 + b * 0.114; // LUMA ratios
+      //https://idmnyu.github.io/p5.js-image/Filters/index.html
+      var gray = r * 0.299 + g * 0.587 + b * 0.114; // Luma formula
 
       //Add luma ratio to each rgb value
       imgOut.pixels[index + 0] = gray;
