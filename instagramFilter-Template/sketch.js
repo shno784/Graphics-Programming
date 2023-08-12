@@ -3,11 +3,10 @@
 
 /*Added two filters, a grayscale filter and an emboss filter with edge detection.
 These were implemented by using an if statement and doing the regular functions of the earlybirdfilter.
-When a number is presssed, the currentFilter will
-switch to the appropriate function and redraw the draw function to show the new filter.
+When a number is pressed, the currentFilter will switch to the appropriate function and redraw the draw function to show the new filter.
 The emboss filter with edge detection shows a regular emboss filter of the image with white lines to determine the edge in the image.
 The emboss filter was done using an X and Y matrix to find the X and Y edge detections and an emboss matrix to emboss the image, while the grayscale image
-was done by extracting the rgb values of each pixel from the image, multiplying them by a luma formula and adding them to the new image to show a gray colour.
+was done by extracting the RGB values of each pixel from the image, multiplying them by a luma formula and adding them to the new image to show a gray colour.
 When the user clicks on a certain part of the left image, the right image will show a more contrasted image with colour in the area where the user clicked.
 */
 var imgIn;
