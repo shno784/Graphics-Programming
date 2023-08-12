@@ -6,6 +6,7 @@ These were implemented by using an if statement and doing the regular functions 
 When a number is presssed, the currentFilter will
 switch to the appropriate function and redraw the draw function to show the new filter.
 The emboss filter with edge detection shows a regular emboss filter of the image with white lines to determine the edge in the image.
+This was done using an X and Y matrix to find the X and Y edge detections and an emboss matrix to emboss the image.
 When the user clicks on a certain part of the left image, the right image will show a more contrasted image with colour in the area where the user clicked.
 */
 var imgIn;
@@ -42,7 +43,6 @@ var embossMatrix = [
   [0, 0, 1]
 ]
 var currentFilter = 1;
-var resetMouseFilter = false;
 //End of writing this code
 
 /////////////////////////////////////////////////////////////////
