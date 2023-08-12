@@ -2,12 +2,11 @@
 // https://en.wikipedia.org/wiki/Dog#/media/File:Siberian_Husky_pho.jpg
 
 /*Added two filters, a grayscale filter and an emboss filter with edge detection.
-These were implemented by using an if statement and doing the regular functions
-to get these filters (from class) and when a key is presssed, the currentFilter will
-switch to the appropriate flag and redraw the draw function to show the new filter.
-The emboss filter with edge detection shows a regular emboss filter of the image with edge detection,
-however when the user clicks on a certain part of the left image, the right image will show a more contrasted
-image with colour added to the edge detection.
+These were implemented by using an if statement and doing the regular functions of the earlybirdfilter.
+When a number is presssed, the currentFilter will
+switch to the appropriate function and redraw the draw function to show the new filter.
+The emboss filter with edge detection shows a regular emboss filter of the image with white lines to determine the edge in the image.
+When the user clicks on a certain part of the left image, the right image will show a more contrasted image with colour in the area where the user clicked.
 */
 var imgIn;
 var matrix = [
@@ -131,6 +130,7 @@ function sepiaFilter(img) {
       imgOut.pixels[index + 3] = 255;
     }
   }
+  //Update the pixels
   imgOut.updatePixels();
   return imgOut;
 }
@@ -161,6 +161,7 @@ function darkCorners(img) {
       img.pixels[index + 3] = 255;
     }
   }
+  //Update the pixels
   img.updatePixels();
   return img;
 }
@@ -197,6 +198,7 @@ function radialBlurFilter(img) {
       imgOut.pixels[index + 3] = a;
     }
   }
+  //Update the pixels
   imgOut.updatePixels();
   return imgOut;
 }
@@ -237,7 +239,7 @@ function borderFilter(img) {
   buffer.strokeWeight(25);
   buffer.rect(0, 0, img.width, img.height, 70);
   buffer.rect(0, 0, img.width, img.height);
-
+  
   return buffer;
 }
 
@@ -272,6 +274,7 @@ function grayscaleFilter(img) {
       imgOut.pixels[index + 3] = 255;
     }
   }
+  //Update the pixels
   imgOut.updatePixels();
   return imgOut;
 }
@@ -316,6 +319,7 @@ function embossEdgeDetection(img) {
       imgOut.pixels[index + 3] = 255;
     }
   }
+  //Update the pixels
   imgOut.updatePixels();
   return imgOut;
 }
